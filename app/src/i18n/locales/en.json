@@ -1,0 +1,76 @@
+{
+  "app": {
+    "tagline": "for iPhone Duo · 7.6″ inner display / 5.4″ outer display"
+  },
+  "screen": {
+    "inner": "Inner",
+    "outer": "Outer",
+    "selectAria": "Select screen"
+  },
+  "toolbar": {
+    "orientationPortrait": "Portrait",
+    "orientationLandscape": "Landscape",
+    "orientationTitle": "Toggle orientation (MVP supports only one fixed rotation direction)",
+    "fillContain": "Fit",
+    "fillCover": "Fill",
+    "safeArea": "Safe area",
+    "safeAreaTitle": "Show safe area",
+    "reset": "Reset",
+    "resetTitle": "Clear and reset"
+  },
+  "pager": {
+    "prev": "Previous page",
+    "next": "Next page"
+  },
+  "safeAreaLegend": {
+    "notch": "Notch / Dynamic Island area",
+    "gesture": "Gesture bar area",
+    "fold": "Fold line (not a safe-area limit, illustrative only)"
+  },
+  "emptyState": {
+    "title": "No content yet",
+    "desc": "Upload an image / PDF, or enter a URL below to start previewing"
+  },
+  "loading": {
+    "default": "Loading…",
+    "pdf": "Parsing PDF…",
+    "web": "Loading webpage…"
+  },
+  "errorState": {
+    "pdfTitle": "Unable to parse PDF",
+    "pdfSub": "The file may be encrypted or corrupted",
+    "webTitle": "This site may refuse to be previewed in an embed",
+    "webSub": "Some sites block iframe embedding for security reasons — this is a browser restriction, not a bug in this tool",
+    "openInNewTab": "Open in new tab ↗"
+  },
+  "fileUploader": {
+    "heading": "Upload file",
+    "dropHint": "Drag an image or PDF here",
+    "or": "or",
+    "chooseFile": "choose a file",
+    "fileTypes": "JPG / PNG / WebP / GIF / SVG / PDF",
+    "changeFile": "Change file",
+    "localOnly": "Files are rendered locally in your browser and never uploaded to a server.",
+    "ariaUpload": "Upload image or PDF"
+  },
+  "urlInput": {
+    "label": "Enter a web address",
+    "submit": "Preview",
+    "hint": "Due to browser security policy, some sites may refuse to be embedded. If that happens, click \"Open in new tab\" instead."
+  },
+  "toast": {
+    "imageTooLarge": "Image exceeds the 50MB limit",
+    "pdfTooLarge": "PDF exceeds the 80MB limit",
+    "unsupportedFormat": "Unsupported file format, please upload an image or PDF",
+    "invalidUrl": "Please enter a valid URL"
+  },
+  "contact": {
+    "heading": "Make your webpage shine on iPhone Duo",
+    "body": "If you'd like your webpage optimized for iPhone Duo, or want professional advice, feel free to email us"
+  },
+  "locale": {
+    "en": "EN",
+    "zh": "中文",
+    "switchAria": "Switch language"
+  }
+}

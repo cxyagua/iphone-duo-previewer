@@ -1,0 +1,76 @@
+{
+  "app": {
+    "tagline": "for iPhone Duo · 7.6″ 内屏 / 5.4″ 外屏"
+  },
+  "screen": {
+    "inner": "内屏",
+    "outer": "外屏",
+    "selectAria": "选择屏幕"
+  },
+  "toolbar": {
+    "orientationPortrait": "竖屏",
+    "orientationLandscape": "横屏",
+    "orientationTitle": "切换横竖屏（MVP 仅支持单一固定旋转方向）",
+    "fillContain": "适应",
+    "fillCover": "填满",
+    "safeArea": "安全区",
+    "safeAreaTitle": "显示安全区",
+    "reset": "重置",
+    "resetTitle": "清空重置"
+  },
+  "pager": {
+    "prev": "上一页",
+    "next": "下一页"
+  },
+  "safeAreaLegend": {
+    "notch": "刘海 / 灵动岛区域",
+    "gesture": "手势条区域",
+    "fold": "折叠线（非安全区限制，仅示意）"
+  },
+  "emptyState": {
+    "title": "还没有内容",
+    "desc": "上传图片 / PDF，或在下方输入网址开始预览"
+  },
+  "loading": {
+    "default": "加载中…",
+    "pdf": "解析 PDF 中…",
+    "web": "加载网页中…"
+  },
+  "errorState": {
+    "pdfTitle": "PDF 无法解析",
+    "pdfSub": "文件可能已加密或已损坏",
+    "webTitle": "该网站可能拒绝被嵌入预览",
+    "webSub": "部分网站出于安全策略禁止被 iframe 嵌入，这是浏览器限制，并非本工具故障",
+    "openInNewTab": "在新标签页打开 ↗"
+  },
+  "fileUploader": {
+    "heading": "上传文件",
+    "dropHint": "拖拽图片或 PDF 到此处",
+    "or": "或",
+    "chooseFile": "点击选择文件",
+    "fileTypes": "JPG / PNG / WebP / GIF / SVG / PDF",
+    "changeFile": "更换文件",
+    "localOnly": "文件仅在你的浏览器本地渲染，不会上传到服务器。",
+    "ariaUpload": "上传图片或 PDF"
+  },
+  "urlInput": {
+    "label": "输入网页地址",
+    "submit": "预览",
+    "hint": "受浏览器安全策略限制，部分网站可能拒绝被嵌入预览，此时可点击\"在新标签页打开\"查看。"
+  },
+  "toast": {
+    "imageTooLarge": "图片超过 50MB 限制",
+    "pdfTooLarge": "PDF 超过 80MB 限制",
+    "unsupportedFormat": "不支持的文件格式，请上传图片或 PDF",
+    "invalidUrl": "请输入有效的网址"
+  },
+  "contact": {
+    "heading": "让网页在 iPhone Duo 上呈现更专业",
+    "body": "如果你希望你的网页在 iPhone Duo 上的展示得到优化，或需要专业建议，欢迎邮件联系"
+  },
+  "locale": {
+    "en": "EN",
+    "zh": "中文",
+    "switchAria": "切换语言"
+  }
+}
