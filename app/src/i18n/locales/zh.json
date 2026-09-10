@@ -1,6 +1,7 @@
 {
   "app": {
-    "tagline": "for iPhone Duo · 7.6″ 内屏 / 5.4″ 外屏"
+    "tagline": "for iPhone Duo",
+    "tagline2": "7.6″ 内屏 / 5.4″ 外屏"
   },
   "screen": {
     "inner": "内屏",

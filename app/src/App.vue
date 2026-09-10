@@ -77,7 +77,7 @@ async function onExport() {
 <template>
   <div class="mx-auto max-w-[1440px] px-4 pt-7 pb-16 md:px-6">
     <!-- 顶部：产品名 + 内外屏切换 -->
-    <header class="mb-5.5 flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
+    <header class="mb-5.5 flex flex-row gap-5 items-center justify-between">
       <div class="flex flex-col gap-1">
         <div class="flex items-baseline gap-1.5">
           <span class="text-[22px] font-extrabold tracking-tight">iDuo</span>
@@ -86,17 +86,20 @@ async function onExport() {
         <span class="font-mono text-[11px] tracking-wide text-[var(--color-ink-muted)] uppercase">
           {{ t('app.tagline') }}
         </span>
+        <span class="font-mono text-[11px] tracking-wide text-[var(--color-ink-muted)] uppercase">
+          {{ t('app.tagline2') }}
+        </span>
       </div>
       <div class="flex items-center gap-2 sm:flex-col sm:items-end">
         <LocaleSwitcher />
-        <ScreenModeToggle :model-value="screenMode" @update:model-value="setScreenMode" />
       </div>
     </header>
-
+    
     <main class="flex flex-col gap-3">
       <!-- 舞台工具条 -->
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-2">
+          <ScreenModeToggle :model-value="screenMode" @update:model-value="setScreenMode" />
           <OrientationToggle :model-value="currentOrientation" @update:model-value="toggleOrientation" />
 
           <div class="inline-flex gap-0.5 rounded-[10px] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-[3px]">
@@ -257,11 +260,11 @@ async function onExport() {
 
     <!-- Contact -->
     <footer
-      class="mt-8 flex flex-col items-start gap-3.5 rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-soft)] px-6 py-8 text-left sm:flex-row sm:items-center sm:justify-between"
+      class="mt-8 flex flex-col items-center sm:items-start gap-3.5 rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-soft)] px-6 py-8 text-left sm:flex-row sm:items-center sm:justify-between"
     >
-      <div class="flex items-center gap-3.5">
+      <div class="flex items-center gap-6">
         <svg
-          class="h-9 w-9 flex-none text-[var(--color-accent-ink)]"
+          class="sm:h-12 sm:w-12  h-16 w-16 flex-none text-[var(--color-accent-ink)]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -278,10 +281,10 @@ async function onExport() {
         </div>
       </div>
       <a
-        href="mailto:iduo@24haowan.com"
-        class="inline-flex flex-none items-center gap-2 rounded-[10px] bg-[var(--color-accent)] px-5 py-2.5 text-[14px] font-bold text-white transition-colors hover:bg-[var(--color-accent-ink)]"
+        href="mailto:cxyagua@gmail.com"
+        class="inline-flex flex-none sm:mt-0 mt-2 items-center gap-2 rounded-[10px] bg-[var(--color-accent)] px-5 py-2.5 text-[14px] font-bold text-white transition-colors hover:bg-[var(--color-accent-ink)]"
       >
-        iduo@24haowan.com
+        cxyagua@gmail.com
       </a>
     </footer>
 

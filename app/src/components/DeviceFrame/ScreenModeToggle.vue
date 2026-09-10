@@ -24,7 +24,7 @@ const options: { value: ScreenId; labelKey: string }[] = [
       type="button"
       role="tab"
       :aria-selected="modelValue === opt.value"
-      class="rounded-[7px] px-4 py-2 text-[13.5px] font-semibold transition-colors"
+      class="rounded-[7px] px-3 py-1.5 text-[12.5px] font-semibold transition-colors"
       :class="
         modelValue === opt.value
           ? 'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-[0_1px_2px_rgba(18,24,26,.06),0_10px_30px_-12px_rgba(18,24,26,.18)]'
