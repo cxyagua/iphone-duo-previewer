@@ -15,6 +15,8 @@
 | 状态管理 | Vue 内置 `ref`/`reactive` + 少量 `provide/inject`，**不引入 Pinia** | MVP 阶段状态很简单（当前内容、当前屏幕模式、UI开关），单文件/少数几个 composable 就能管，过早引入状态库是不必要的复杂度 |
 | 路由 | 不需要 | 单页面工具，没有多路由场景，不引入 vue-router |
 | PDF 渲染 | `pdf.js`（`pdfjs-dist`） | 见 PRD 6.2 |
+| 国际化 | `vue-i18n`（Composition API 模式） | 新增，见 PRD 4.7、本文档第 5.7 节 |
+| 图片手势交互 | `@panzoom/panzoom` | 图片预览的滚轮缩放 + 拖拽平移，超出原始 MVP 范围的增强体验 |
 | 包管理 | pnpm（推荐）或 npm，看团队习惯 | |
 
 MVP 阶段（对应 PRD 第 9 节已确认的决策）：**不需要后端**，网页预览仅做 iframe 嵌入，文件完全本地渲染不上传。因此 V1.0 是一个**纯前端静态站**，可以直接用 Vite 打包产物部署到任意静态托管（Vercel / Netlify / 静态对象存储 + CDN）。
@@ -60,7 +62,8 @@ src/
 │   └── common/
 │       ├── EmptyState.vue
 │       ├── ErrorState.vue
-│       └── LoadingSpinner.vue
+│       ├── LoadingSpinner.vue
+│       └── LocaleSwitcher.vue        # 语言切换分段控制器
 ├── composables/
 │   ├── usePreviewSource.ts   # 当前预览内容（图片/PDF/网页）的状态与切换逻辑
 │   ├── useScreenMode.ts      # 内屏/外屏状态 + 横竖屏 orientation 状态 + 派生出的最终设备参数
@@ -68,6 +71,11 @@ src/
 ├── config/
 │   └── devices/
 │       └── iphone-duo.ts     # 设备参数配置（见第 4 节），后续多机型直接在此目录加文件
+├── i18n/
+│   ├── index.ts              # createI18n 实例、语言检测与持久化（见第 5.7 节）
+│   └── locales/
+│       ├── en.json           # 英文语言包（默认/回退语言）
+│       └── zh.json           # 中文语言包
 ├── types/
 │   ├── device.ts             # DeviceProfile / ScreenProfile 类型定义
 │   └── preview.ts            # PreviewSource 联合类型定义
@@ -150,6 +158,15 @@ PreviewSource:
 - 安全区浮层组件根据当前 orientation 读 `safeArea` 还是 `safeAreaLandscape`，二者是配置文件里两份独立数据，组件本身不做任何旋转计算，逻辑上更简单也更不容易出错。
 - MVP 范围内横屏只有一个固定方向，`OrientationToggle.vue` 做成一个二态开关（竖屏/横屏）即可，不需要做三态或四态的方向选择器。
 
+### 5.7 多语言 / 国际化（新增）
+
+- 使用 `vue-i18n` 的 Composition API 模式（`createI18n({ legacy: false, ... })`），在 `main.ts` 里通过 `app.use(i18n)` 全局挂载，组件内统一用 `const { t } = useI18n()` 取文案，不手写字符串拼接。
+- 语言包按 locale 拆成独立 JSON 文件（`src/i18n/locales/en.json` / `zh.json`），key 按功能模块分组（`app` / `toolbar` / `fileUploader` / `toast` 等），与 `types/` 下的类型拆分思路一致，方便新增语言时对照翻译、不遗漏 key。
+- 初始语言检测顺序：`localStorage`（key: `iduo-locale`）中的用户偏好 → 找不到则回退默认英文（`en`）。当前版本 MVP 阶段不做浏览器 `navigator.language` 自动检测，避免和用户手动选择的语言产生冲突歧义。
+- `fallbackLocale: 'en'`：任何语言包缺失某个 key 时自动回退英文文案，不会出现空白或 key 原样展示的情况。
+- 切换语言通过 `setLocale(locale)` 同步更新 `i18n.global.locale` 和 `localStorage`，是纯前端状态切换，不触发页面刷新或重新请求内容。
+- 后续新增语言（如日语）的步骤：在 `locales/` 下新增一份 JSON、在 `i18n/index.ts` 的 `LocaleCode` 联合类型和 `messages` 里注册、在 `LocaleSwitcher.vue` 的 `options` 里加一项，不需要改动其余业务组件。
+
 ---
 
 ## 6. 依赖清单
@@ -158,6 +175,10 @@ PreviewSource:
 - `vue` `typescript` `vite` `@vitejs/plugin-vue`
 - `tailwindcss` `postcss` `autoprefixer`
 - `pdfjs-dist`
+
+**MVP 范围之外已引入（现网使用中）**
+- `vue-i18n`：多语言支持，见第 5.7 节
+- `@panzoom/panzoom`：图片预览的缩放/平移手势
 
 **V1.1 才需要引入**
 - `html2canvas`（导出预览图为 PNG，如果最终选择 DOM 截图方案；若内容全部走 canvas 渲染则可能不需要额外库）

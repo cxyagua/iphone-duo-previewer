@@ -4,7 +4,7 @@ import type { DeviceProfile } from '../../types/device'
 /**
  * iPhone Duo 设备参数配置。
  *
- * 分辨率 / ppi / 对角线：苹果官方发布信息确认（2026-09-09），见 PRD.md 第 0 / 6.1 节。
+ * 分辨率 / ppi / 对角线：苹果官方发布信息确认（2026-09-09），见 docs/PRD.md 第 0 / 6.1 节。
  * 安全区（safeArea）、外屏圆角（corner）、灵动岛位置：官方只给了定性描述，没有逐像素数据，
  * 这里用示意比例估算，后续拿到精确数据后只改这份配置，不用动组件代码。
  * frame-inner.png 的 holePad 是对图片 alpha 通道做像素分析实测得出的精确值，不是估的。

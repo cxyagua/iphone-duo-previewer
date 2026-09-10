@@ -5,7 +5,7 @@ import type { FillMode, Orientation, ScreenId } from '../types/device'
 /**
  * 内屏/外屏 + 横竖屏 + 填充模式 + 安全区开关的状态与派生数据。
  * 做成可实例化的 composable（而非模块级单例），为将来「分屏效果预览」
- * 需要两份独立 screen 状态时留好扩展空间，见 TECH_SPEC.md 第 9 节。
+ * 需要两份独立 screen 状态时留好扩展空间，见 docs/TECH_SPEC.md 第 9 节。
  */
 export function useScreenMode() {
   const screenMode = ref<ScreenId>('inner')
