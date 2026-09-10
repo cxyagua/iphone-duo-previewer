@@ -22,7 +22,7 @@ function attach(url: string) {
     settled = true
     status.value = 'blocked'
     emit('blocked', url)
-  }, 6000)
+  }, 10000)
 }
 
 function onIframeLoad() {

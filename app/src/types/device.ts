@@ -16,13 +16,6 @@ export interface HolePad {
   right: number
 }
 
-export interface CornerRadius {
-  tl: number
-  tr: number
-  br: number
-  bl: number
-}
-
 /**
  * 一块屏幕（内屏/外屏）的完整展示参数。
  * 分辨率/ppi/对角线取自 PRD 6.1 已确认的 iPhone Duo 官方数据；
@@ -37,17 +30,21 @@ export interface ScreenProfile {
   diagonalInches: number
   safeArea: Record<Orientation, SafeAreaBox>
   hasIsland: boolean
-  islandEdge?: Record<Orientation, 'top' | 'bottom' | 'left' | 'right'>
+  /** 灵动岛/摄像头安全区色块，相对内容画布（屏幕开孔）的位置百分比；直接量的是素材照片里摄像头的真实位置，不是简单居中估算 */
+  island?: Record<Orientation, { top: number; left: number; width: number; height: number }>
   fold?: Record<Orientation, 'horizontal' | 'vertical'>
-  /** 有真实抠图素材的屏幕：素材内屏幕开孔相对整图的留白百分比 */
-  frameImage?: {
+  /** 真实抠图素材：素材内屏幕开孔相对整图的留白百分比 + 素材本身是按哪个方向拍摄/设计的 */
+  frameImage: {
     src: string
     holePad: HolePad
-  }
-  /** 没有素材、用 CSS 手绘的屏幕：按 360px 基准宽度标定的圆角 + 边框厚度比例 */
-  cssBezel?: {
-    corner: Record<Orientation, CornerRadius>
-    bezelRatio: number
+    /** 素材原始方向；渲染另一方向时靠 CSS 旋转同一张图实现，不需要两张素材 */
+    nativeOrientation: Orientation
+    /**
+     * 素材本身（nativeOrientation 方向下）的像素尺寸。
+     * 用于按素材真实长宽比 contain 布局，避免图被拉伸变形——
+     * 外框展示区的宽高比是按屏幕分辨率算的，跟素材照片本身的长宽比不一定完全一致。
+     */
+    naturalSize: { w: number; h: number }
   }
 }
 

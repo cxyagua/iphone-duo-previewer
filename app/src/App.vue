@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DeviceFrame from './components/DeviceFrame/DeviceFrame.vue'
 import ScreenModeToggle from './components/DeviceFrame/ScreenModeToggle.vue'
@@ -13,6 +13,7 @@ import UrlInput from './components/InputPanel/UrlInput.vue'
 import LocaleSwitcher from './components/common/LocaleSwitcher.vue'
 import { useScreenMode } from './composables/useScreenMode'
 import { usePreviewSource } from './composables/usePreviewSource'
+import { useExportImage } from './composables/useExportImage'
 import type { FillMode } from './types/device'
 
 const { t } = useI18n()
@@ -29,10 +30,13 @@ const {
   toggleSafeArea,
 } = useScreenMode()
 
-const { source, toastMessage, handleFiles, loadUrl, markUrlLoaded, markUrlBlocked, setPdfPage, reset } =
+const { source, toastMessage, handleFiles, loadUrl, markUrlLoaded, markUrlBlocked, setPdfPage, reset, showToast } =
   usePreviewSource()
 
+const { exporting, exportImage } = useExportImage()
+
 const urlInputRef = ref<InstanceType<typeof UrlInput> | null>(null)
+const deviceFrameRef = ref<InstanceType<typeof DeviceFrame> | null>(null)
 
 const fillOptions: { value: FillMode; labelKey: string }[] = [
   { value: 'contain', labelKey: 'toolbar.fillContain' },
@@ -48,10 +52,30 @@ function onReset() {
 }
 
 const showPager = computed(() => source.value?.type === 'pdf' && source.value.totalPages > 1)
+
+onMounted(() => {
+  urlInputRef.value?.setValue('deepseek.com')
+  loadUrl('deepseek.com')
+})
+
+// 网页预览是跨域 iframe，浏览器安全限制下 html2canvas 无法读取其内容（会导出成空白框），
+// 所以导出功能只对图片/PDF 开放；网址截图导出留给 V1.1 的截图兜底方案（见 docs/FEATURE_LIST.md）。
+const canExport = computed(() => !!source.value && source.value.type !== 'url' && !exporting.value)
+
+async function onExport() {
+  const el = deviceFrameRef.value?.frameRef
+  if (!el || !canExport.value) return
+  try {
+    const filename = `iduo-previewer-${screenMode.value}-${currentOrientation.value}-${Date.now()}.png`
+    await exportImage(el, filename)
+  } catch {
+    showToast('toast.exportFailed')
+  }
+}
 </script>
 
 <template>
-  <div class="mx-auto max-w-[1180px] px-6 pt-7 pb-16">
+  <div class="mx-auto max-w-[1440px] px-4 pt-7 pb-16 md:px-6">
     <!-- 顶部：产品名 + 内外屏切换 -->
     <header class="mb-5.5 flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
       <div class="flex flex-col gap-1">
@@ -112,23 +136,40 @@ const showPager = computed(() => source.value?.type === 'pdf' && source.value.to
           </button>
         </div>
 
-        <button
-          type="button"
-          class="inline-flex items-center gap-1.5 rounded-[9px] px-3 py-2 text-[13px] font-semibold text-[var(--color-ink-muted)] hover:border hover:border-[var(--color-border)] hover:bg-[var(--color-surface)] hover:text-[var(--color-ink)]"
-          :title="t('toolbar.resetTitle')"
-          @click="onReset"
-        >
-          <svg class="h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 12a9 9 0 1 0 3-6.7" />
-            <path d="M3 4v5h5" />
-          </svg>
-          <span>{{ t('toolbar.reset') }}</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-[9px] border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2 text-[13px] font-semibold text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-ink)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[var(--color-border)] disabled:hover:text-[var(--color-ink)]"
+            :disabled="!canExport"
+            :title="source?.type === 'url' ? t('toolbar.exportUnavailableForUrl') : t('toolbar.exportTitle')"
+            @click="onExport"
+          >
+            <svg class="h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3v12" />
+              <path d="m7 10 5 5 5-5" />
+              <path d="M4 19.5h16" />
+            </svg>
+            <span>{{ exporting ? t('toolbar.exporting') : t('toolbar.export') }}</span>
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-[9px] px-3 py-2 text-[13px] font-semibold text-[var(--color-ink-muted)] hover:border hover:border-[var(--color-border)] hover:bg-[var(--color-surface)] hover:text-[var(--color-ink)]"
+            :title="t('toolbar.resetTitle')"
+            @click="onReset"
+          >
+            <svg class="h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 12a9 9 0 1 0 3-6.7" />
+              <path d="M3 4v5h5" />
+            </svg>
+            <span>{{ t('toolbar.reset') }}</span>
+          </button>
+        </div>
       </div>
 
       <!-- 舞台 -->
       <div>
-        <DeviceFrame :screen="screen" :orientation="currentOrientation" :safe-area-on="safeAreaOn">
+        <DeviceFrame ref="deviceFrameRef" :screen="screen" :orientation="currentOrientation" :safe-area-on="safeAreaOn">
           <div class="absolute inset-0 z-[1]">
             <EmptyState v-if="!source" />
             <ImagePreview v-else-if="source.type === 'image'" :source="source" :fill-mode="fillMode" />

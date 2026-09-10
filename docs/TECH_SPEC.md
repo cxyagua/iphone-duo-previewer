@@ -132,8 +132,10 @@ PreviewSource:
 ## 5. 关键实现思路（不含代码，只讲技术路径）
 
 ### 5.1 设备外框（含 D 形外屏非对称圆角）
-- 内屏：用 CSS `border-radius` 四角相同即可，无需 SVG。
-- 外屏：四角/两侧圆角不同，`border-radius` 的 8 值简写（`border-radius: tl-h tr-h br-h bl-h / tl-v tr-v br-v bl-v`）理论上可以做非对称圆角，但更推荐直接用内联 SVG `<path>` 画外框轮廓 + `clip-path: url(#clipId)` 裁切内容区，精度和可维护性更好，参数直接从 `ScreenProfile.cornerRadius` 算出路径。
+- 内屏 / 外屏都改用真实抠图素材（`frame-inner.png` / `frame-outer.png`），不再用 CSS/SVG 手绘轮廓。素材本身自带非对称圆角、铰链、摄像头等细节，不需要额外的 `clip-path` 或 SVG path。
+- 素材以 `nativeOrientation` 记录拍摄/设计时的方向（内屏是 landscape，外屏是 portrait），渲染另一方向时用 CSS `rotate-90` 直接旋转同一张图，不需要为每个屏幕准备两张素材。
+- 素材内屏幕开孔（transparent hole）相对整图的留白百分比记在 `ScreenProfile.frameImage.holePad` 里，靠脚本对图片 alpha 通道做像素分析实测得出（而不是估算），内容层按这个百分比定位，叠在素材下方；素材本身盖在上层（z-index 更高），靠自身不透明的圆角边框把内容层的直角遮成跟真机一致的圆角/D 形轮廓。
+- 外屏素材原图四周有大片透明留白（尤其右侧，导致图放大铺满容器后中间露出一截透明空隙），处理时先按机身轮廓的 alpha 包围盒紧裁一次，再基于裁剪后的图重新测 `holePad`，裁剪后右侧边框明显比左侧窄，才吻合"右窄左宽让位铰链"的描述。
 
 ### 5.2 安全区浮层
 - 一个绝对定位的 overlay 层，叠在内容层之上、设备外框之下（z-index 居中）。

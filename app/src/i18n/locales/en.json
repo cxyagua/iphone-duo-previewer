@@ -15,6 +15,10 @@
     "fillCover": "Fill",
     "safeArea": "Safe area",
     "safeAreaTitle": "Show safe area",
+    "export": "Export image",
+    "exporting": "Exporting…",
+    "exportTitle": "Export the current device frame + content as a PNG",
+    "exportUnavailableForUrl": "Web preview can't be exported yet (cross-origin restriction) — use an image or PDF instead",
     "reset": "Reset",
     "resetTitle": "Clear and reset"
   },
@@ -39,8 +43,8 @@
   "errorState": {
     "pdfTitle": "Unable to parse PDF",
     "pdfSub": "The file may be encrypted or corrupted",
-    "webTitle": "This site may refuse to be previewed in an embed",
-    "webSub": "Some sites block iframe embedding for security reasons — this is a browser restriction, not a bug in this tool",
+    "webTitle": "This webpage couldn't be loaded in the preview",
+    "webSub": "This may be because the site blocks iframe embedding, or because it took too long to load — this is a browser restriction or a network issue, not a bug in this tool",
     "openInNewTab": "Open in new tab ↗"
   },
   "fileUploader": {
@@ -62,7 +66,8 @@
     "imageTooLarge": "Image exceeds the 50MB limit",
     "pdfTooLarge": "PDF exceeds the 80MB limit",
     "unsupportedFormat": "Unsupported file format, please upload an image or PDF",
-    "invalidUrl": "Please enter a valid URL"
+    "invalidUrl": "Please enter a valid URL",
+    "exportFailed": "Export failed, please try again"
   },
   "contact": {
     "heading": "Make your webpage shine on iPhone Duo",

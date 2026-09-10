@@ -6,7 +6,7 @@ const props = defineProps<{ screen: ScreenProfile; orientation: Orientation }>()
 
 const sa = computed(() => props.screen.safeArea[props.orientation])
 const foldDir = computed(() => props.screen.fold?.[props.orientation])
-const islandEdge = computed(() => props.screen.islandEdge?.[props.orientation])
+const island = computed(() => props.screen.island?.[props.orientation])
 
 const notchStripe =
   'background-image:repeating-linear-gradient(45deg, color-mix(in srgb, var(--color-zone-notch) 55%, transparent) 0 6px, transparent 6px 12px);'
@@ -48,28 +48,11 @@ const gestureStripe =
       ></div>
     </template>
 
-    <!-- 外屏：灵动岛示意 -->
-    <template v-else-if="screen.hasIsland && islandEdge">
-      <div
-        v-if="islandEdge === 'top'"
-        class="absolute left-1/2 -translate-x-1/2 rounded-full bg-black/90"
-        :style="{ top: sa.top * 0.28 + '%', width: '26%', height: sa.top * 0.5 + '%' }"
-      ></div>
-      <div
-        v-else-if="islandEdge === 'right'"
-        class="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/90"
-        :style="{ right: sa.right * 0.28 + '%', height: '26%', width: sa.right * 0.5 + '%' }"
-      ></div>
-      <div
-        v-else-if="islandEdge === 'left'"
-        class="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/90"
-        :style="{ left: sa.left * 0.28 + '%', height: '26%', width: sa.left * 0.5 + '%' }"
-      ></div>
-      <div
-        v-else
-        class="absolute left-1/2 -translate-x-1/2 rounded-full bg-black/90"
-        :style="{ bottom: sa.bottom * 0.28 + '%', width: '26%', height: sa.bottom * 0.5 + '%' }"
-      ></div>
-    </template>
+    <!-- 外屏：灵动岛/摄像头安全区，位置直接对照实拍素材里的摄像头位置 -->
+    <div
+      v-if="screen.hasIsland && island"
+      class="absolute rounded-full bg-black/90"
+      :style="{ top: island.top + '%', left: island.left + '%', width: island.width + '%', height: island.height + '%' }"
+    ></div>
   </div>
 </template>

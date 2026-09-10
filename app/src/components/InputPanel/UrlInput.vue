@@ -14,6 +14,9 @@ defineExpose({
   clear: () => {
     value.value = ''
   },
+  setValue: (v: string) => {
+    value.value = v
+  },
 })
 </script>
 
