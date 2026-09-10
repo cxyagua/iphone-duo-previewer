@@ -38,14 +38,18 @@
   "loading": {
     "default": "加载中…",
     "pdf": "解析 PDF 中…",
-    "web": "加载网页中…"
+    "web": "加载网页中…",
+    "screenshot": "正在截图预览…"
   },
   "errorState": {
     "pdfTitle": "PDF 无法解析",
     "pdfSub": "文件可能已加密或已损坏",
     "webTitle": "网页未能在预览区加载",
-    "webSub": "可能是该网站禁止被 iframe 嵌入，也可能是网站加载较慢超过了等待时间，这是浏览器限制或网络原因，并非本工具故障",
+    "webSub": "该网站禁止被 iframe 嵌入，已尝试截图兜底但也未成功，可能是网站加载过慢或截图服务暂时不可用",
     "openInNewTab": "在新标签页打开 ↗"
+  },
+  "webPreview": {
+    "screenshotBadge": "静态截图 · 非实时"
   },
   "fileUploader": {
     "heading": "上传文件",
@@ -60,14 +64,15 @@
   "urlInput": {
     "label": "输入网页地址",
     "submit": "预览",
-    "hint": "受浏览器安全策略限制，部分网站可能拒绝被嵌入预览，此时可点击\"在新标签页打开\"查看。"
+    "hint": "受浏览器安全策略限制，部分网站可能拒绝被嵌入预览，此时会自动切换为截图预览。"
   },
   "toast": {
     "imageTooLarge": "图片超过 50MB 限制",
     "pdfTooLarge": "PDF 超过 80MB 限制",
     "unsupportedFormat": "不支持的文件格式，请上传图片或 PDF",
     "invalidUrl": "请输入有效的网址",
-    "exportFailed": "导出失败，请重试"
+    "exportFailed": "导出失败，请重试",
+    "screenshotFallback": "该网站无法直接嵌入，已自动切换为截图预览"
   },
   "contact": {
     "heading": "让网页在 iPhone Duo 上呈现更专业",

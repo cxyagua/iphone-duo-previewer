@@ -38,14 +38,18 @@
   "loading": {
     "default": "Loading…",
     "pdf": "Parsing PDF…",
-    "web": "Loading webpage…"
+    "web": "Loading webpage…",
+    "screenshot": "Taking a screenshot preview…"
   },
   "errorState": {
     "pdfTitle": "Unable to parse PDF",
     "pdfSub": "The file may be encrypted or corrupted",
     "webTitle": "This webpage couldn't be loaded in the preview",
-    "webSub": "This may be because the site blocks iframe embedding, or because it took too long to load — this is a browser restriction or a network issue, not a bug in this tool",
+    "webSub": "This site blocks iframe embedding, and the screenshot fallback didn't succeed either — the site may be too slow to load, or the screenshot service may be temporarily unavailable",
     "openInNewTab": "Open in new tab ↗"
+  },
+  "webPreview": {
+    "screenshotBadge": "Static screenshot · not live"
   },
   "fileUploader": {
     "heading": "Upload file",
@@ -60,14 +64,15 @@
   "urlInput": {
     "label": "Enter a web address",
     "submit": "Preview",
-    "hint": "Due to browser security policy, some sites may refuse to be embedded. If that happens, click \"Open in new tab\" instead."
+    "hint": "Due to browser security policy, some sites may refuse to be embedded. If that happens, it automatically switches to a screenshot preview."
   },
   "toast": {
     "imageTooLarge": "Image exceeds the 50MB limit",
     "pdfTooLarge": "PDF exceeds the 80MB limit",
     "unsupportedFormat": "Unsupported file format, please upload an image or PDF",
     "invalidUrl": "Please enter a valid URL",
-    "exportFailed": "Export failed, please try again"
+    "exportFailed": "Export failed, please try again",
+    "screenshotFallback": "This site can't be embedded directly — switched to a screenshot preview"
   },
   "contact": {
     "heading": "Make your webpage shine on iPhone Duo",

@@ -75,6 +75,12 @@ const holePad = computed(() => props.screen.frameImage.holePad)
 // 素材本身是按 nativeOrientation 拍的；渲染另一方向时靠旋转同一张图实现，不需要为每个屏幕准备两张素材
 const rotated = computed(() => props.orientation !== props.screen.frameImage.nativeOrientation)
 
+// 旋转方向不是随便选一个都行：素材本身长什么样、铰链/摄像头在哪一侧，决定了必须往哪个方向转
+// 才能转到正确的朝向。内屏、外屏两块素材实测都得逆时针转（顺时针转出来摄像头/铰链位置是镜像错的）。
+// 插槽把角度传出去，是因为 slot 内容（网页预览）自己也需要按同样的角度做一次反向旋转，
+// 否则网页的响应式视口和画框的旋转会对不上（见 WebPreview 里的用法）。
+const rotationDeg = computed(() => (rotated.value ? -90 : 0))
+
 // frameW/frameH 盒子现在已经是照片自身比例撑出来的（见上面 aspect），这里仍然用 contain
 // 而不是直接等于盒子尺寸，是留一道保险：万一某个屏幕的照片比例和盒子算出来的比例有浮点误差，
 // 也只会留一点点边距，绝不会把真实照片拉伸变形。
@@ -148,7 +154,7 @@ onBeforeUnmount(() => clearTimeout(fadeSafetyTimer))
         class="absolute"
         :class="
           rotated
-            ? 'top-1/2 left-1/2 h-[100cqw] w-[100cqh] -translate-x-1/2 -translate-y-1/2 rotate-90'
+            ? 'top-1/2 left-1/2 h-[100cqw] w-[100cqh] -translate-x-1/2 -translate-y-1/2 -rotate-90'
             : 'inset-0'
         "
       >
@@ -161,7 +167,7 @@ onBeforeUnmount(() => clearTimeout(fadeSafetyTimer))
             height: contentRect.height + 'px',
           }"
         >
-          <slot />
+          <slot :rotation-deg="rotationDeg" />
           <SafeAreaOverlay v-if="safeAreaOn" :screen="screen" :orientation="orientation" />
         </div>
         <img

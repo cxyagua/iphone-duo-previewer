@@ -8,5 +8,8 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: ['.trycloudflare.com'],
+    proxy: {
+      '/api': 'http://localhost:3001',
+    },
   },
 })

@@ -45,14 +45,20 @@ export const IPHONE_DUO: DeviceProfile = {
       dpr: 3,
       diagonalInches: 5.4,
       hasIsland: true,
-      // 对 frame-outer.png 里摄像头暗色圆点做像素分析实测得出的位置（相对屏幕开孔百分比，
-      // 按素材原始的 nativeOrientation=portrait 量的）。
+      // 对 frame-outer.png 做连通域分析实测出的摄像头圆点位置：在裁剪后的 918x1047 原图里，
+      // 摄像头是一个孤立的近黑色圆形色块，圆心 (797, 114)，直径 62px（与镜头旁边连成一片的
+      // 机身黑色边框是分开的两个连通域，取的是面积较小、独立的那一个）。
+      // 换算成相对屏幕开孔（contentRect，见下面 holePad 算出的 left=67 right=875 top=42 bottom=1011，
+      // 宽 808 高 969）的百分比：圆心 left=(797-67)/808=90.35%，top=(114-42)/969=7.43%；
+      // 直径换算成宽高各自的百分比（不能共用一个百分比，因为 contentRect 不是正方形，宽高各自的
+      // 每百分比对应的实际像素数不一样，直接用同一个百分比会把正圆画成椭圆）：
+      // width=62/808=7.67%，height=62/969=6.40%；top/left 再各自减半个宽高换算成左上角坐标。
       // landscape 直接复用同一组数值，不能重新按角度换算——DeviceFrame 里横屏是把素材连同内容一起
-      // CSS rotate-90 整体转过去的刚体旋转，这个安全区色块画在同一个本地坐标系里，会跟着素材一起
+      // 整体旋转的刚体旋转，这个安全区色块画在同一个本地坐标系里，会跟着素材一起
       // 转到正确位置，如果再手动做一次角度变换反而是重复旋转，会转到镜头对面去。
       island: {
-        portrait: { top: 1.5, left: 84, width: 16, height: 11 },
-        landscape: { top: 1.5, left: 84, width: 16, height: 11 },
+        portrait: { top: 4.23, left: 86.51, width: 7.67, height: 6.4 },
+        landscape: { top: 4.23, left: 86.51, width: 7.67, height: 6.4 },
       },
       safeArea: {
         portrait: { top: 6.5, bottom: 3, left: 3.2, right: 1.4 },

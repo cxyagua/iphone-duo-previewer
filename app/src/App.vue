@@ -170,19 +170,24 @@ async function onExport() {
       <!-- 舞台 -->
       <div>
         <DeviceFrame ref="deviceFrameRef" :screen="screen" :orientation="currentOrientation" :safe-area-on="safeAreaOn">
-          <div class="absolute inset-0 z-[1]">
-            <EmptyState v-if="!source" />
-            <ImagePreview v-else-if="source.type === 'image'" :source="source" :fill-mode="fillMode" />
-            <PdfPreview v-else-if="source.type === 'pdf'" :source="source" :fill-mode="fillMode" />
-            <WebPreview
-              v-else-if="source.type === 'url'"
-              :url="source.value"
-              :screen="screen"
-              :orientation="currentOrientation"
-              @loaded="markUrlLoaded"
-              @blocked="markUrlBlocked"
-            />
-          </div>
+          <template #default="{ rotationDeg }">
+            <div class="absolute inset-0 z-[1]">
+              <EmptyState v-if="!source" />
+              <ImagePreview v-else-if="source.type === 'image'" :source="source" :fill-mode="fillMode" />
+              <PdfPreview v-else-if="source.type === 'pdf'" :source="source" :fill-mode="fillMode" />
+              <WebPreview
+                v-else-if="source.type === 'url'"
+                :url="source.value"
+                :screen="screen"
+                :orientation="currentOrientation"
+                :fill-mode="fillMode"
+                :frame-rotation="rotationDeg"
+                @loaded="markUrlLoaded"
+                @blocked="markUrlBlocked"
+                @screenshot="showToast('toast.screenshotFallback')"
+              />
+            </div>
+          </template>
         </DeviceFrame>
 
         <!-- PDF 翻页 -->

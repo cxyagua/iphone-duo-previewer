@@ -184,7 +184,10 @@ PreviewSource:
 
 **V1.1 才需要引入**
 - `html2canvas`（导出预览图为 PNG，如果最终选择 DOM 截图方案；若内容全部走 canvas 渲染则可能不需要额外库）
-- 如果做网页截图兜底：后端另起项目，不在这个前端仓库依赖里（建议 Node + Playwright 独立服务，通过一个简单 API 提供截图）
+- 网页截图兜底（已实现，2026-09-10）：后端是仓库内新增的 `server/` 目录，独立的 Node 项目（有自己的 `package.json`，依赖不进 `app/`），技术栈 Express + Playwright（Chromium）。开发环境下 `server/` 监听 3001 端口，`app/vite.config.ts` 用 `server.proxy` 把 `/api` 转发到 3001，前端始终走相对路径调用，保持和 `app` 同域，不需要引入 CORS 配置。两个接口：
+  - `POST /api/embed-check`：轻量请求头预检，判断目标网址是否会拒绝 iframe 嵌入（见 `PRD.md` 4.1 节的踩坑记录——单靠 iframe 加载超时判断不可靠，被拒绝嵌入的网站通常几百毫秒内就触发 `load` 事件）。
+  - `POST /api/screenshot`：真正调用 Playwright 截图，内存缓存 10 分钟 + 同 URL 并发去重 + 全局并发上限 3。
+  - 两个接口都先过一遍 `server/src/ssrf.ts` 的基础 SSRF 校验（协议白名单 + hostname/DNS 解析结果过滤私有网段）。
 
 **不建议引入**
 - 大型 UI 组件库（Element Plus / Ant Design Vue 等）——这是一个视觉高度定制的工具型产品（设备框、安全区浮层都是自绘），通用组件库能复用的部分很少，反而增加包体积和样式覆盖成本，用 Tailwind 手写交互组件（上传区、按钮、分段控制器）更合适。
@@ -206,7 +209,7 @@ PreviewSource:
 
 - `npm run build` 产出纯静态文件，直接部署到 Vercel / Netlify / Cloudflare Pages 均可，免运维、免服务器成本，符合"MVP 不需要后端"的决策。
 - 域名/HTTPS 走托管平台自带能力即可，不需要额外配置。
-- 等 V1.1 引入网页截图兜底服务后，再补充后端部署方案（届时前端只需新增一个 API base URL 配置，架构上是纯增量，不影响现有前端代码）。
+- V1.1 已引入网页截图兜底服务（`server/` 目录），当前 dev 环境的对外访问方式：`cloudflared tunnel --url http://localhost:5173` 暴露 Vite dev server，`server/`（3001 端口）本身不直接对外暴露，只通过 Vite 的 `server.proxy` 被同一个隧道域名下的 `/api` 路径间接访问。生产部署方案（`server/` 单独部署 + 前端配置真实 API base URL，或前端反代）仍未定，留待正式上线前评估。
 
 ---
 

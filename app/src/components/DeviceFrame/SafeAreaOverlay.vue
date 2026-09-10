@@ -48,11 +48,12 @@ const gestureStripe =
       ></div>
     </template>
 
-    <!-- 外屏：灵动岛/摄像头安全区，位置直接对照实拍素材里的摄像头位置 -->
+    <!-- 外屏：灵动岛/摄像头安全区，位置直接对照实拍素材里的摄像头位置；
+    和其他安全区一样用斜纹样式提示"限制区域"，不画成实心摄像头图形 -->
     <div
       v-if="screen.hasIsland && island"
-      class="absolute rounded-full bg-black/90"
-      :style="{ top: island.top + '%', left: island.left + '%', width: island.width + '%', height: island.height + '%' }"
+      class="absolute rounded-full bg-[var(--color-zone-notch-soft)]"
+      :style="[notchStripe, { top: island.top + '%', left: island.left + '%', width: island.width + '%', height: island.height + '%' }]"
     ></div>
   </div>
 </template>
